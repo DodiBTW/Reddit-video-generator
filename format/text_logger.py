@@ -8,6 +8,7 @@ class TextLogger:
             self.open_log(long)
         print(("┃"+(long-2)*" "+"┃").center(self.console_size))
         print(("┃"+text.center(long-2)+"┃").center(self.console_size))
+        print(("┃"+(long-2)*" "+"┃").center(self.console_size))
         if close:
             self.close_log(long)
         else:
@@ -21,6 +22,6 @@ class TextLogger:
         print(("┗"+(long-2)*"━"+"┛").center(60).center(self.console_size))
     def clear_console(self): 
         if platform.system() == "Windows":
-             os.system('cls')
+            os.system('cls')
         else:
             os.system('clear')

@@ -2,6 +2,8 @@ import format.text_logger as text_logger
 import format.input_checker as input_checker
 import reddit_helper.reddit as reddit
 import reddit_helper.data_extractor as data_extractor
+import video.video as video
+import tts.speech_generator as speech_generator
 if __name__ == "__main__":
     logger = text_logger.TextLogger()
     checker = input_checker.InputChecker()
@@ -41,6 +43,7 @@ if __name__ == "__main__":
         except:
             logger.clear_console()
             logger.log("Invalid number of comments. Please enter a valid number.", open=True, close=True)
+    logger.log("Number of comments accepted!", open=True)
     if link.endswith("/"):
         link = link[:-1]
     link = link + ".json"
@@ -49,11 +52,18 @@ if __name__ == "__main__":
     data = reddit_extractor.fetchData()
     logger.log("Data fetched successfully!", close=True)
     extractor = data_extractor.DataExtractor(data)
-    logger.log("Extracting text and comments...", open=True)
-    print(extractor.extract_post_content())
-    print(extractor.extract_comments(num_comments))
-    logger.log("Extracted text and comments!", close=True)
-    logger.log("Generating video...", open=True)
-    logger.log("Video generated successfully!", close=True)
+    logger.log("Extracting post information...", open=True)
+    content = extractor.extract_post_content()
+    body = content["selftext"]
+    post_title = content["title"]
+    logger.log("Extracted post information!", close=True)
     logger.log("Generating text to speech...", open=True)
+    tts_manager = speech_generator.SpeechGenerator()
+    tts_manager.save_body_tts(body)
+    tts_manager.save_title_tts(post_title)
     logger.log("Text to speech generated successfully!", close=True)
+    logger.log("Generating video...", open=True)
+    video_manager = video.Video(title, post_title, body, audio_delay=1.5)
+    video_manager.create_video(True)
+    logger.log("Video generated successfully!", close=True)
+    logger.log("Thank you for using the reddit video generator!", open=True, close=True)
