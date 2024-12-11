@@ -160,7 +160,9 @@ cython_debug/
 #.idea/
 
 /output/*
-!/output/
+!/output
 
 /assets/videos/*
-!/assets/videos/
+!/assets/videos
+
+!.gitkeep
