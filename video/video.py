@@ -38,7 +38,7 @@ class Video:
         else:
             silence = AudioArrayClip(np.zeros((1, 2)), fps=fps)
 
-        final = concatenate_audioclips([silence, self.title_mp3, silence, self.body_mp3])
+        final = concatenate_audioclips([ self.title_mp3, silence, self.body_mp3])
         if comment_audio is not None:
             return concatenate_audioclips([final, silence, comment_audio])
         else:
@@ -61,9 +61,9 @@ class Video:
         aspect_ratio = video_width / video_height
         return aspect_ratio == 16 / 9
 
-    def add_subtitles(self, video, subtitles, font='Arial', fontsize=24, max_width=500, stroke_width=1, color='white'):
+    def add_subtitles(self, video, subtitles, font='Poppins', fontsize=36, max_width=400, stroke_width=3, color='white', text_outline='black'):
         font = "assets/fonts/" + font + ".ttf"
-        clips = [TextClip(font,subtitle[1], stroke_width=stroke_width, color=color ,font_size=fontsize, size=(max_width, None)).with_position(('center', 'center')).with_duration(subtitle[0]).with_start(subtitle[2]) for subtitle in subtitles]
+        clips = [TextClip(font,subtitle[1], stroke_width=stroke_width,stroke_color=text_outline, color=color ,font_size=fontsize, size=(max_width, None)).with_position(('center', 'center')).with_duration(subtitle[0]).with_start(subtitle[2]) for subtitle in subtitles]
         return CompositeVideoClip([video] + clips)
     def create_video(self, random_video = True, path="", fade_duration = 1.5):
         """
@@ -89,15 +89,12 @@ class Video:
         audio_on_video = cropped_clip.with_audio(final_audio)
         subtitle_manager = subtitles.Subtitles(self.title, self.text)
         title_speak_time = subtitle_manager.get_speaking_duration(self.title) + 0.5
-        body_clips = subtitle_manager.get_subtitle_array_into_subtitles(subtitle_manager.get_divided_body(), title_speak_time+2)
+        body_clips = subtitle_manager.get_subtitle_array_into_subtitles(subtitle_manager.get_divided_body(), title_speak_time+1)
         title_clip = [(title_speak_time, subtitles.Subtitles.add_line_breaks(self.title), 0.5)]
-        # add line breaks for each 25 characters
         for i in range(len(body_clips)):
             body_clips[i] = (body_clips[i][0], subtitles.Subtitles.add_line_breaks(body_clips[i][1]), body_clips[i][2])
         subtitles_clips =   title_clip + body_clips
-        subtitled_video = self.add_subtitles(audio_on_video, subtitles_clips, color="orange")
-        subtitled_video = subtitled_video.crossfadeout(fade_duration)
-        subtitled_video = subtitled_video.crossfadein(fade_duration-1)
+        subtitled_video = self.add_subtitles(audio_on_video, subtitles_clips, color="white")
         subtitled_video.write_videofile(self.save_path,codec="libx264")
         background_video.close()
         cropped_clip.close()
