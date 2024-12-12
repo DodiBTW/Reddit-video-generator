@@ -89,8 +89,8 @@ class Video:
         audio_on_video = cropped_clip.with_audio(final_audio)
         subtitle_manager = subtitles.Subtitles(self.title, self.text)
         title_speak_time = subtitle_manager.get_speaking_duration(self.title) + 0.5
-        body_clips = subtitle_manager.get_subtitle_array_into_subtitles(subtitle_manager.get_divided_body(), title_speak_time+1)
-        title_clip = [(title_speak_time, subtitles.Subtitles.add_line_breaks(self.title), 0.5)]
+        body_clips = subtitle_manager.get_subtitle_array_into_subtitles(subtitle_manager.get_divided_body(), title_speak_time)
+        title_clip = [(title_speak_time, subtitles.Subtitles.add_line_breaks(self.title), 0.2)]
         for i in range(len(body_clips)):
             body_clips[i] = (body_clips[i][0], subtitles.Subtitles.add_line_breaks(body_clips[i][1]), body_clips[i][2])
         subtitles_clips =   title_clip + body_clips

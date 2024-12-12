@@ -1,6 +1,6 @@
 import re
 class Subtitles:
-    def __init__(self, title, body, speed = 160):
+    def __init__(self, title, body, speed = 165):
         """
             title = title of the reddit post, extracted during request
             body = content of the reddit post, extracted during request
