@@ -22,7 +22,8 @@ class Video:
     def choose_random_video(self):
         background_videos_path = os.path.join('assets' , 'videos')
         files = [f for f in os.listdir(background_videos_path) if os.path.isfile(os.path.join(background_videos_path, f))]
-        # Choose a random file from the list
+        if '.gitkeep' in files:
+            files.remove('.gitkeep')
         if files:
             return random.choice(files)
         else:
@@ -60,8 +61,11 @@ class Video:
         aspect_ratio = video_width / video_height
         return aspect_ratio == 16 / 9
 
-    
-    def create_video(self, random_video = True, path=""):
+    def add_subtitles(self, video, subtitles, font='Arial', fontsize=24, max_width=500, stroke_width=1, color='white'):
+        font = "assets/fonts/" + font + ".ttf"
+        clips = [TextClip(font,subtitle[1], stroke_width=stroke_width, color=color ,font_size=fontsize, size=(max_width, None)).with_position(('center', 'center')).with_duration(subtitle[0]).with_start(subtitle[2]) for subtitle in subtitles]
+        return CompositeVideoClip([video] + clips)
+    def create_video(self, random_video = True, path="", fade_duration = 1.5):
         """
             This function is supposed to add text onto a random/specified background video, then layer the audio correctly.
         """
@@ -84,11 +88,17 @@ class Video:
         # Subtitles and audio
         audio_on_video = cropped_clip.with_audio(final_audio)
         subtitle_manager = subtitles.Subtitles(self.title, self.text)
-        title_subtitles = subtitle_manager.get_divided_title()
-        body_subtitles = subtitle_manager.get_divided_body()
-        # print("Our divided bodies are : " , body_subtitles, title_subtitles)
-
-        audio_on_video.write_videofile(self.save_path,codec="libx264")
+        title_speak_time = subtitle_manager.get_speaking_duration(self.title) + 0.5
+        body_clips = subtitle_manager.get_subtitle_array_into_subtitles(subtitle_manager.get_divided_body(), title_speak_time+2)
+        title_clip = [(title_speak_time, subtitles.Subtitles.add_line_breaks(self.title), 0.5)]
+        # add line breaks for each 25 characters
+        for i in range(len(body_clips)):
+            body_clips[i] = (body_clips[i][0], subtitles.Subtitles.add_line_breaks(body_clips[i][1]), body_clips[i][2])
+        subtitles_clips =   title_clip + body_clips
+        subtitled_video = self.add_subtitles(audio_on_video, subtitles_clips, color="orange")
+        subtitled_video = subtitled_video.crossfadeout(fade_duration)
+        subtitled_video = subtitled_video.crossfadein(fade_duration-1)
+        subtitled_video.write_videofile(self.save_path,codec="libx264")
         background_video.close()
         cropped_clip.close()
         trimmed_clip.close()

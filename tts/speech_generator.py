@@ -2,7 +2,7 @@ from gtts import gTTS
 import os
 
 class SpeechGenerator:
-    def __init__(self, language='fr'):
+    def __init__(self, language='en'):
         self.language = language
         self.accent = 'com'
         self.save_path = "temp"
