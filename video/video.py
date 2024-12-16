@@ -65,6 +65,7 @@ class Video:
         font = "assets/fonts/" + font + ".ttf"
         clips = [TextClip(font,subtitle[1], stroke_width=stroke_width,stroke_color=text_outline, color=color ,font_size=fontsize, size=(max_width, None)).with_position(('center', 'center')).with_duration(subtitle[0]).with_start(subtitle[2]) for subtitle in subtitles]
         return CompositeVideoClip([video] + clips)
+    
     def create_video(self, random_video = True, path="", fade_duration = 1.5):
         """
             This function is supposed to add text onto a random/specified background video, then layer the audio correctly.
