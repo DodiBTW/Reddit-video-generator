@@ -166,3 +166,8 @@ cython_debug/
 !/assets/videos
 
 !.gitkeep
+!.gitignore
+!.gitattributes
+!.gitmodules
+!.gitlab-ci.yml
+temp/*

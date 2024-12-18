@@ -34,16 +34,6 @@ if __name__ == "__main__":
             logger.log("Invalid title. Please enter a valid title.", open=True, close=True)
     logger.close_log()
     logger.log("Title accepted!", open=True)
-    logger.log("How many comments would you like ", close=True)
-    num_comments = 0
-    while True:
-        try:
-            num_comments = int(input("Enter the number of comments: "))
-            break
-        except:
-            logger.clear_console()
-            logger.log("Invalid number of comments. Please enter a valid number.", open=True, close=True)
-    logger.log("Number of comments accepted!", open=True)
     if link.endswith("/"):
         link = link[:-1]
     link = link + ".json"
