@@ -3,7 +3,12 @@
 ## Isn't it beautiful?
 This python script will generate a well structured reddit video format which is currently very popular on platforms like tiktok and youtube shorts, fully automatically! The process of thousands of different channels can be automated and generated in a few minutes once a day for the same results.
 
-How? Just run the script and enter a link, as well as the title of your video, and you will receive a full reddit video after a few moments!
+## How to use
+- Install at least one video to the assets/videos folder in mp4 format.
+- Install the python requirements from the requirement.txt file
+- Run the script using python
+- Paste a reddit post link
+- Find generated video in the output folder
 
 ## How this script works
 - The script uses the requests library to pull the reddit data, then formats it into a title and a body.
