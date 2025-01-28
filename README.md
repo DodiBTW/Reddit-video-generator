@@ -17,5 +17,5 @@ This python script will generate a well structured reddit video format which is 
 - Chooses a random video from the assets/videos folder, then cuts it randomly based on total duration of text to speech.
 - Adds speech and subtitles onto the video with correct timings and delays
 - Renders the video
-## How to use
+## Requirements
 Install python 3, as well as all dependencies in the requirements.txt file, then add videos to the assets/videos folder. Afterwards, you can simply run main.py 
