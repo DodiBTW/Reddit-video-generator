@@ -9,9 +9,6 @@ import argparse
 # ---------------- CONFIG ---------------- #
 if not os.path.exists("env"):
     os.makedirs("env")
-if not os.path.exists("env/oauth2.json"):
-    with open("env/oauth2.json", "w") as f:
-        f.write("{}")
 CLIENT_SECRETS_FILE = "env/client_secret.json"  # download this from Google Cloud Console
 TOKEN_STORAGE_FILE = "env/oauth2.json"
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
