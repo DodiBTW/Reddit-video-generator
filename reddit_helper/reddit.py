@@ -1,13 +1,8 @@
 import requests as requests
-import json
-import time
 import os
 import sys
-import platform
-import random
-import subprocess
 import re
-import shutil
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'format')))
 import text_logger as text_logger
 class Reddit:
