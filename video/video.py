@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import re
 
 import random
 import video.subtitles as subtitles
@@ -7,9 +8,11 @@ from moviepy import VideoFileClip, TextClip, CompositeVideoClip, VideoClip
 from moviepy.video.fx.Crop import Crop
 from pydub import AudioSegment
 from moviepy import AudioFileClip, AudioClip, AudioArrayClip, concatenate_audioclips
+
 class Video:
     def __init__(self, output_name , title , body, video_length = 0, audio_delay = 0):
-        self.save_path = os.path.join('output', output_name + '.mp4')
+        self.sanitized_name = re.sub(r'[^a-zA-Z0-9-_ ]', '', output_name).replace("/", "-")
+        self.save_path = os.path.join('output', self.sanitized_name + '.mp4')
         body_audio_path = os.path.join('temp', 'temporary_body_audio.mp3')
         title_audio_path = os.path.join('temp', 'temporary_title_audio.mp3')
         self.output_name = output_name
@@ -18,7 +21,8 @@ class Video:
         self.title_mp3 = AudioFileClip(title_audio_path)
         self.text = body
         self.title = title
-
+    def get_file_path(self):
+        return self.sanitized_name
     def choose_random_video(self):
         background_videos_path = os.path.join('assets' , 'videos')
         files = [f for f in os.listdir(background_videos_path) if os.path.isfile(os.path.join(background_videos_path, f))]
@@ -50,11 +54,16 @@ class Video:
         crop_width = video_height * 9 / 16
         return video.cropped(width=crop_width, height=video_height, x_center=video_width / 2, y_center=video_height / 2)
 
-    def trim_video(self,video,audio):
+    def trim_video(self, video, audio):
         duration = video.duration
         audio_duration = audio.duration
+
+        if duration <= audio_duration:
+            print(video.duration, "audio", audio.duration)
+            raise ValueError("The video duration is shorter than or equal to the audio duration. Cannot trim the video.")
+
         start_timeframe = random.randint(0, int(duration - audio_duration))
-        return video.subclipped(start_timeframe, start_timeframe + (audio_duration+3))
+        return video.subclipped(start_timeframe, start_timeframe + (audio_duration + 3))
 
     def is_desktop_aspect_ratio(self, video):
         video_width, video_height = video.size

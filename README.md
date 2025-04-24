@@ -17,5 +17,10 @@ This python script will generate a well structured reddit video format which is 
 - Chooses a random video from the assets/videos folder, then cuts it randomly based on total duration of text to speech.
 - Adds speech and subtitles onto the video with correct timings and delays
 - Renders the video
+
+## How to upload to youtube?
+A new feature, uploading to YouTube, has been added.
+In order to upload a video to youtube, you must create a google cloud console projet "Web app" and an Oauth2 client with "http://localhost:8080" allowed as a client. When you run the script with youtube video uploads, a tab will open on your browser where you can sign in to your account. Due to the fact our web app is still in test mode, you need to add your google account as a test user inside of the google cloud console web app. To do so, go to Apis and services > Oauth consent screen > Audience > Test users and add the email of your google account.
+
 ## Requirements
 Install python 3, as well as all dependencies in the requirements.txt file, then add videos to the assets/videos folder. Afterwards, you can simply run main.py 

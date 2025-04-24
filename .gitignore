@@ -122,9 +122,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
-env/
 venv/
-ENV/
 env.bak/
 venv.bak/
 
@@ -171,3 +169,4 @@ cython_debug/
 !.gitmodules
 !.gitlab-ci.yml
 temp/*
+*.json
