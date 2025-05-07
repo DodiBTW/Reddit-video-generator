@@ -2,6 +2,7 @@ import json
 import os
 import random
 import time
+import sys
 from reddit_helper.reddit import Reddit
 from reddit_helper.data_extractor import DataExtractor
 from video.video import Video
@@ -37,10 +38,12 @@ def load_subreddits():
         return json.load(f)
 
 def main():
+    once = "once=true" in sys.argv
+
     while True:
         subreddits = load_subreddits()
         subreddit = random.choice(subreddits)
-        reddit = Reddit(f"https://www.reddit.com/r/{subreddit}/hot.json")
+        reddit = Reddit(f"https://www.reddit.com/r/{subreddit}/top.json?t=day")
         posts = reddit.fetch_popular_posts(subreddit)
         generated = False
         used_posts = load_used_posts()
@@ -60,7 +63,6 @@ def main():
             tts_manager = SpeechGenerator()
             tts_manager.save_body_tts(body)
             tts_manager.save_title_tts(title)
-            print()
             print("Generating video for post...")
             video_manager = Video(title, title, body, audio_delay=1.5)
             video_manager.create_video(True)
@@ -71,10 +73,16 @@ def main():
             save_used_post(post_id)
             generated = True
             break
+
+        
+
         if not generated:
             print("No valid posts found. Retrying in 3 seconds...")
             time.sleep(3)
         else:
-            time.sleep(30)
+            if once:
+                break
+            time.sleep(90)
+
 if __name__ == "__main__":
     main()
